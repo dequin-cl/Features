@@ -1,11 +1,18 @@
-    import XCTest
-    @testable import Features
+import XCTest
+import Features
 
-    final class FeaturesTests: XCTestCase {
-        func testExample() {
-            // This is an example of a functional test case.
-            // Use XCTAssert and related functions to verify your tests produce the correct
-            // results.
-            XCTAssertEqual(Features().text, "Hello, World!")
-        }
+enum Features {
+    static func isEnabled(_ name: String) -> Bool {
+        false
     }
+}
+
+final class FeatureTests: XCTestCase {
+
+    func test_nonExistingFeature_isDisabled() {
+        let nonExistingFeature = "Any Feature"
+        let isEnabled = Features.isEnabled(nonExistingFeature)
+        
+        XCTAssertFalse(isEnabled, "Expected \(nonExistingFeature) to be disabled. Got enabled")
+    }
+}
