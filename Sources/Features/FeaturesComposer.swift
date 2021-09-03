@@ -11,7 +11,7 @@ protocol FeaturesValueProvider {
 struct FeaturesComposer: FeaturesProvider {
     let primary: FeaturesValueProvider
     let secondary: FeaturesValueProvider
-    
+
     init(primary: FeaturesValueProvider, secondary: FeaturesValueProvider) {
         self.primary = primary
         self.secondary = secondary
@@ -20,7 +20,7 @@ struct FeaturesComposer: FeaturesProvider {
     func isEnabled(_ name: String, default: Bool) -> Bool {
         process(primary.isEnabled(name), secondary.isEnabled(name), default: `default`)
     }
-    
+
     private func process(_ primary: Bool?, _ secondary: Bool?, default: Bool) -> Bool {
         if let primary = primary {
             return primary
