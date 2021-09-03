@@ -11,6 +11,7 @@ extension UserDefaults {
     static var primary: UserDefaults { UserDefaults(suiteName: Configuration.remoteSuiteName)! }
     
     static var primarySourceName: String { Configuration.remoteSuiteName }
+    static var secondarySourceName: String { Configuration.localSuiteName }
 }
 
 // MARK: - TestHooks
