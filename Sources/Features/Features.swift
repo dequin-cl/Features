@@ -15,7 +15,10 @@ private extension UserDefaults {
 
 public enum Features {
 
-    static private let composer = FeaturesComposer(primary: FeaturesValue(source: UserDefaults.local), secondary: FeaturesValue(source: UserDefaults.remote))
+    static private let composer = FeaturesComposer(
+        primary: FeaturesValue(source: UserDefaults.remote),
+        secondary: FeaturesValue(source: UserDefaults.local)
+    )
     
     public static func isEnabled(_ name: FeatureName, default: Bool = false) -> Bool {
         isEnabled(name.description,default: `default`)
@@ -26,60 +29,13 @@ public enum Features {
     }
 }
 
-protocol FeaturesProvider {
-    func isEnabled(_ name: String, default: Bool) -> Bool
-}
-
-protocol FeaturesValueProvider {
-    func isEnabled(_ name: String) -> Bool?
-}
-
-struct FeaturesComposer: FeaturesProvider {
-    let primary: FeaturesValueProvider
-    let secondary: FeaturesValueProvider
-    
-    init(primary: FeaturesValueProvider, secondary: FeaturesValueProvider) {
-        self.primary = primary
-        self.secondary = secondary
-    }
-
-    func isEnabled(_ name: String, default: Bool) -> Bool {
-        process(primary.isEnabled(name), secondary.isEnabled(name), default: `default`)
-    }
-    
-    private func process(_ primary: Bool?, _ secondary: Bool?, default: Bool) -> Bool {
-        if let primary = primary {
-            return primary
-        }
-
-        if let secondary = secondary {
-            return secondary
-        }
-
-        return `default`
-    }
-}
-
-struct FeaturesValue: FeaturesValueProvider {
-    
-    private let source: UserDefaults
-    
-    init(source: UserDefaults) {
-        self.source = source
-    }
-    
-    func isEnabled(_ name: String) -> Bool? {
-        source.object(forKey: name) as? Bool
-    }
-}
-
 // MARK: - TestHooks
 
 #if DEBUG
     public extension Features {
         struct TestHooks {
-            public static var primarySuiteName: String { Configuration.localSuiteName }
-            public static var secondarySuiteName: String { Configuration.remoteSuiteName }
+            public static var primarySuiteName: String { Configuration.remoteSuiteName }
+            public static var secondarySuiteName: String { Configuration.localSuiteName }
         }
     }
 #endif
