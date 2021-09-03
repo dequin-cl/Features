@@ -24,7 +24,6 @@ let package = Package(
         .testTarget(
             name: "FeaturesTests",
             dependencies: ["Features"],
-            exclude: ["FeaturesIntegratedTests.swift.plist"],
             sources: ["FeaturesTests.swift", "FeaturesIntegratedTests.swift"]
         ),
     ]
