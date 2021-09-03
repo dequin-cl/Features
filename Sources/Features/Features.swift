@@ -2,22 +2,29 @@ import Foundation
 
 public protocol FeatureName: CustomStringConvertible {}
 
-fileprivate extension UserDefaults {
+fileprivate enum Configuration {
     static let bundleIdentifier = Bundle.main.object(forInfoDictionaryKey: "CFBundleIdentifier") as! String
     static let localSuiteName = "\(bundleIdentifier).local"
-    
-    static var local: UserDefaults {
-        return UserDefaults(suiteName: localSuiteName)!
-    }
+}
+
+private extension UserDefaults {
+    static var local: UserDefaults { UserDefaults(suiteName: Configuration.localSuiteName)! }
 }
 
 public enum Features {
-    public static func isEnabled(_ name: String, default: Bool = false) -> Bool {
-        UserDefaults.local.value(forKey: name) as? Bool ?? `default`
-    }
 
     public static func isEnabled(_ name: FeatureName, default: Bool = false) -> Bool {
-        UserDefaults.local.value(forKey: name.description) as? Bool ?? `default`
+        isEnabled(name.description,default: `default`)
+    }
+    
+    public static func isEnabled(_ name: String, default: Bool = false) -> Bool {
+        FeaturesValue.isEnabled(name) ?? `default`
+    }
+}
+
+private struct FeaturesValue {
+    static func isEnabled(_ name: String, source: UserDefaults = .local) -> Bool? {
+        source.object(forKey: name) as? Bool
     }
 }
 
@@ -26,7 +33,7 @@ public enum Features {
 #if DEBUG
     public extension Features {
         struct TestHooks {
-            public static var localSuiteName: String { UserDefaults.localSuiteName }
+            public static var localSuiteName: String { Configuration.localSuiteName }
         }
     }
 #endif
