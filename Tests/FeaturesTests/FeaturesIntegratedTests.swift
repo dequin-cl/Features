@@ -49,7 +49,7 @@ final class FeaturesIntegratedTests: XCTestCase {
     }
     
     // MARK: - Helpers
-    private func userDefaultLocalSuiteName() -> String { Features.TestHooks.localSuiteName }
+    private func userDefaultLocalSuiteName() -> String { Features.TestHooks.primarySuiteName }
 }
 
 private extension Features {

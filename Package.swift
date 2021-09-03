@@ -24,7 +24,7 @@ let package = Package(
         .testTarget(
             name: "FeaturesTests",
             dependencies: ["Features"],
-            sources: ["FeaturesTests.swift", "FeaturesIntegratedTests.swift"]
+            sources: ["FeaturesTests.swift", "FeaturesIntegratedTests.swift", "FeaturesPrioritiesTests.swift"]
         ),
     ]
 )

@@ -5,6 +5,7 @@ public protocol FeatureName: CustomStringConvertible {}
 fileprivate enum Configuration {
     static let bundleIdentifier = Bundle.main.object(forInfoDictionaryKey: "CFBundleIdentifier") as! String
     static let localSuiteName = "\(bundleIdentifier).local"
+    static let remoteSuiteName = "\(bundleIdentifier).remote"
 }
 
 private extension UserDefaults {
@@ -33,7 +34,8 @@ private struct FeaturesValue {
 #if DEBUG
     public extension Features {
         struct TestHooks {
-            public static var localSuiteName: String { Configuration.localSuiteName }
+            public static var primarySuiteName: String { Configuration.localSuiteName }
+            public static var secondarySuiteName: String { Configuration.remoteSuiteName }
         }
     }
 #endif
