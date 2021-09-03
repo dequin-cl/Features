@@ -1,18 +1,6 @@
 import XCTest
 import Features
 
-protocol FeatureName: CustomStringConvertible {}
-
-enum Features {
-    static func isEnabled(_ name: String, default: Bool = false) -> Bool {
-        `default`
-    }
-
-    static func isEnabled(_ name: FeatureName, default: Bool = false) -> Bool {
-        `default`
-    }
-}
-
 final class FeatureTests: XCTestCase {
 
     func test_nonExistingFeature_isDisabled() {
