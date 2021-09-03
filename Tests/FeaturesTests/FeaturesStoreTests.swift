@@ -28,21 +28,16 @@ final class FeaturesStoreTests: XCTestCase {
     }
 
     func test_FeatureStore_canRemoveAllValues_fromPrimary() {
-        
-        FeatureStore.set(true, for: "featureName1", on: .primary)
-        FeatureStore.set(true, for: "featureName2", on: .primary)
-        FeatureStore.set(true, for: "featureName3", on: .primary)
-        
+        typealias FeaturesState = (feature: String, isEnabled: Bool?)
+        let featureNames = ["featureName1", "featureName2", "featureName3"]
+        featureNames.forEach { FeatureStore.set(true, for: $0, on: .primary) }
+                
         FeatureStore.removeAll(from: .primary)
         
-        let isEnabledInPrimary1 = Features.TestHooksSource.isEnabledInPrimary("featureName1")
-        let isEnabledInPrimary2 = Features.TestHooksSource.isEnabledInPrimary("featureName2")
-        let isEnabledInPrimary3 = Features.TestHooksSource.isEnabledInPrimary("featureName3")
-
-        XCTAssertNil(isEnabledInPrimary1, "Expected `featureName1` to not be defined on Primary source")
-        XCTAssertNil(isEnabledInPrimary2, "Expected `featureName2` to not be defined on Primary source")
-        XCTAssertNil(isEnabledInPrimary3, "Expected `featureName3` to not be defined on Primary source")
-
+        let isEnabledInPrimary: [FeaturesState] = featureNames.map { ($0, Features.TestHooksSource.isEnabledInPrimary($0)) }
+        
+        isEnabledInPrimary.forEach { isEnabled in
+            XCTAssertNil(isEnabled.isEnabled, "Expected `\(isEnabled.feature)` to not be defined on Primary source")
+        }
     }    
 }
-
