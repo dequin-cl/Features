@@ -24,12 +24,28 @@ final class FeaturesIntegratedTests: XCTestCase {
         XCTAssertTrue(isEnabled, "Expected `Test` to be enabled, got disabled")
     }
     
+    func test_featureIsDisable_forFalseValueInUserDefault() {
+        userDefaults.setValue(false, forKey: "Test")
+        
+        let isEnabled = Features.isEnabled("Test")
+        
+        XCTAssertFalse(isEnabled, "Expected `Test` to be disabled, got enabled")
+    }
+    
     func test_featureName_IsEnable_forTrueValueInUserDefault() {
         userDefaults.setValue(true, forKey: Features.Tests.test.rawValue)
         
         let isEnabled = Features.isEnabled(Features.Tests.test)
         
         XCTAssertTrue(isEnabled, "Expected `Test` to be enabled, got disabled")
+    }
+    
+    func test_featureName_IsDisable_forFalseValueInUserDefault() {
+        userDefaults.setValue(false, forKey: Features.Tests.test.rawValue)
+        
+        let isEnabled = Features.isEnabled(Features.Tests.test)
+        
+        XCTAssertFalse(isEnabled, "Expected `Test` to be disabled, got enabled")
     }
     
     // MARK: - Helpers
