@@ -19,4 +19,8 @@ public enum FeatureStore {
     public static func removeAll(from source: FeatureSource) {
         UserDefaults.primary.removePersistentDomain(forName: UserDefaults.primarySourceName)
     }
+    
+    public static func remove(feature key: String, from source: FeatureSource) {
+        UserDefaults.primary.removeObject(forKey: key)
+    }
 }

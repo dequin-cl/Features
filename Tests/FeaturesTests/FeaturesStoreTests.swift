@@ -40,4 +40,23 @@ final class FeaturesStoreTests: XCTestCase {
             XCTAssertNil(isEnabled.isEnabled, "Expected `\(isEnabled.feature)` to not be defined on Primary source")
         }
     }    
+
+
+    func test_FeatureStore_canRemoveOneValue_fromPrimary() {
+        typealias FeaturesState = (feature: String, isEnabled: Bool?)
+        let featureNames = ["featureName1", "featureName2", "featureName3"]
+        featureNames.forEach { FeatureStore.set(true, for: $0, on: .primary) }
+        
+        FeatureStore.remove(feature: "featureName1",from: .primary)
+
+        let expectedFeatureNames = ["featureName2", "featureName3"]
+        
+        let isEnabled = Features.TestHooksSource.isEnabledInPrimary("featureName1")
+        XCTAssertNil(isEnabled, "Expected `featureName1` to not be defined on Primary source")
+        
+        let isEnabledInPrimary: [FeaturesState] = expectedFeatureNames.map { ($0, Features.TestHooksSource.isEnabledInPrimary($0)) }
+        isEnabledInPrimary.forEach { isEnabled in
+            XCTAssertEqual(isEnabled.isEnabled, true, "Expected `\(isEnabled.feature)` to be defined on Primary source")
+        }
+    }
 }
