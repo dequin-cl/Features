@@ -28,6 +28,15 @@ final class FeaturesPrioritiesTests: XCTestCase {
         XCTAssertFalse(isEnabled, "Expected `Test` to be disabled, got enabled")
     }
     
+    func test_Features_returnsValueFromSecondarySource_whenNotSetOnPrimary() {
+        secondarySourceUserDefaults.setValue(true, forKey: "Test")
+        
+        let isEnabled = Features.isEnabled("Test")
+        
+        XCTAssertTrue(isEnabled, "Expected `Test` to be enabled, got disabled")
+    }
+    
+    
     // MARK: - Helpers
     private func userDefaultPrimarySuiteName() -> String { Features.TestHooks.primarySuiteName }
     private func userDefaultSecondarySuiteName() -> String { Features.TestHooks.secondarySuiteName }
