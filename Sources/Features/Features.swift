@@ -23,8 +23,8 @@ public enum Features {
 #if DEBUG
     public extension Features {
         enum TestHooksSource {
-            public static func isEnabledInPrimary(_ name: String) -> Bool? { UserDefaults.primary.value(forKey: name) as? Bool }
-            public static func isEnabledInSecondary(_ name: String) -> Bool? { UserDefaults.secondary.value(forKey: name) as? Bool }
+            public static func isEnabledInPrimary(_ name: String) -> Bool? { UserDefaults.primary?.value(forKey: name) as? Bool }
+            public static func isEnabledInSecondary(_ name: String) -> Bool? { UserDefaults.secondary?.value(forKey: name) as? Bool }
         }
     }
 #endif

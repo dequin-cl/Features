@@ -12,11 +12,11 @@ public enum FeatureStore {
     }
 
     public static func set(_ value: Bool, for name: String, on featureSource: FeatureSource) {
-        source(featureSource).object.setValue(value, forKey: name)
+        source(featureSource).object?.setValue(value, forKey: name)
     }
 
     public static func removeAll(from featureSource: FeatureSource) {
-        source(featureSource).object.removePersistentDomain(forName: source(featureSource).name)
+        source(featureSource).object?.removePersistentDomain(forName: source(featureSource).name)
     }
 
     public static func remove(feature name: FeatureName, from featureSource: FeatureSource) {
@@ -24,10 +24,10 @@ public enum FeatureStore {
     }
 
     public static func remove(feature key: String, from featureSource: FeatureSource) {
-        source(featureSource).object.removeObject(forKey: key)
+        source(featureSource).object?.removeObject(forKey: key)
     }
 
-    private static func source(_ source: FeatureSource) -> (object: UserDefaults, name: String) {
+    private static func source(_ source: FeatureSource) -> (object: UserDefaults?, name: String) {
         switch source {
         case .primary:
             return (UserDefaults.primary, UserDefaults.primarySourceName)
