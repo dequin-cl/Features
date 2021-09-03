@@ -3,14 +3,13 @@ import Features
 
 final class FeaturesIntegratedTests: XCTestCase {
     private var userDefaults: UserDefaults!
-    private let bundleIdentifier = Bundle.main.object(forInfoDictionaryKey: "CFBundleIdentifier") as! String
     
     override func setUp() {
-        userDefaults = UserDefaults(suiteName: userDefaultSuiteName())
+        userDefaults = UserDefaults(suiteName: userDefaultLocalSuiteName())
     }
     
     override func tearDown() {
-        userDefaults.removePersistentDomain(forName: userDefaultSuiteName())
+        userDefaults.removePersistentDomain(forName: userDefaultLocalSuiteName())
         
         let directoryURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         let fileURL = URL(fileURLWithPath: #file, relativeTo: directoryURL).appendingPathExtension("plist")
@@ -34,9 +33,7 @@ final class FeaturesIntegratedTests: XCTestCase {
     }
     
     // MARK: - Helpers
-    private func userDefaultSuiteName() -> String {
-        "\(bundleIdentifier).local"
-    }
+    private func userDefaultLocalSuiteName() -> String { Features.TestHooks.localSuiteName }
 }
 
 private extension Features {

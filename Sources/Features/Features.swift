@@ -2,11 +2,12 @@ import Foundation
 
 public protocol FeatureName: CustomStringConvertible {}
 
-extension UserDefaults {
-    private static let bundleIdentifier = Bundle.main.object(forInfoDictionaryKey: "CFBundleIdentifier") as! String
+fileprivate extension UserDefaults {
+    static let bundleIdentifier = Bundle.main.object(forInfoDictionaryKey: "CFBundleIdentifier") as! String
+    static let localSuiteName = "\(bundleIdentifier).local"
     
     static var local: UserDefaults {
-        return UserDefaults(suiteName: "\(bundleIdentifier).local")!
+        return UserDefaults(suiteName: localSuiteName)!
     }
 }
 
@@ -19,3 +20,13 @@ public enum Features {
         UserDefaults.local.value(forKey: name.description) as? Bool ?? `default`
     }
 }
+
+// MARK: - TestHooks
+
+#if DEBUG
+    public extension Features {
+        struct TestHooks {
+            public static var localSuiteName: String { UserDefaults.localSuiteName }
+        }
+    }
+#endif
