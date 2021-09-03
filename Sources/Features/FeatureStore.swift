@@ -14,6 +14,9 @@ public enum FeatureStore {
         case .secondary:
             UserDefaults.secondary.setValue(value, forKey: name)
         }
-        
+    }
+    
+    public static func removeAll(from source: FeatureSource) {
+        UserDefaults.primary.removePersistentDomain(forName: UserDefaults.primarySourceName)
     }
 }

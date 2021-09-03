@@ -9,6 +9,8 @@ fileprivate enum Configuration {
 extension UserDefaults {
     static var secondary: UserDefaults { UserDefaults(suiteName: Configuration.localSuiteName)! }
     static var primary: UserDefaults { UserDefaults(suiteName: Configuration.remoteSuiteName)! }
+    
+    static var primarySourceName: String { Configuration.remoteSuiteName }
 }
 
 // MARK: - TestHooks
