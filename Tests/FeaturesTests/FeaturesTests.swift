@@ -35,7 +35,7 @@ final class FeatureTests: XCTestCase {
     }
 }
 
-extension Features {
+private extension Features {
     enum Tests: String, FeatureName {
         var description: String { rawValue }
         

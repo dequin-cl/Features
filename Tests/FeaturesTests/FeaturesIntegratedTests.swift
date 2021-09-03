@@ -25,8 +25,24 @@ final class FeaturesIntegratedTests: XCTestCase {
         XCTAssertTrue(isEnabled, "Expected `Test` to be enabled, got disabled")
     }
     
+    func test_featureName_IsEnable_forTrueValueInUserDefault() {
+        userDefaults.setValue(true, forKey: Features.Tests.test.rawValue)
+        
+        let isEnabled = Features.isEnabled(Features.Tests.test)
+        
+        XCTAssertTrue(isEnabled, "Expected `Test` to be enabled, got disabled")
+    }
+    
     // MARK: - Helpers
     private func userDefaultSuiteName() -> String {
         "\(bundleIdentifier).local"
+    }
+}
+
+private extension Features {
+    enum Tests: String, FeatureName {
+        var description: String { rawValue }
+        
+        case test
     }
 }

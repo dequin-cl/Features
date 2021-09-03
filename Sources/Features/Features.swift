@@ -16,6 +16,6 @@ public enum Features {
     }
 
     public static func isEnabled(_ name: FeatureName, default: Bool = false) -> Bool {
-        `default`
+        UserDefaults.local.value(forKey: name.description) as? Bool ?? `default`
     }
 }
