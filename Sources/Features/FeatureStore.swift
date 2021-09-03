@@ -8,32 +8,24 @@ public enum FeatureSource {
 public enum FeatureStore {
     
     public static func set(_ value: Bool, for name: String, on featureSource: FeatureSource) {
-        source(featureSource).setValue(value, forKey: name)
+        source(featureSource).object.setValue(value, forKey: name)
     }
-    
+
     public static func removeAll(from featureSource: FeatureSource) {
-        source(featureSource).removePersistentDomain(forName: sourceName(featureSource))
+        source(featureSource).object.removePersistentDomain(forName: source(featureSource).name)
     }
-    
+
     public static func remove(feature key: String, from source: FeatureSource) {
         UserDefaults.primary.removeObject(forKey: key)
     }
-    
-    private static func source(_ source: FeatureSource) -> UserDefaults {
+
+    private static func source(_ source: FeatureSource) -> (object: UserDefaults, name: String) {
         switch source {
         case .primary:
-            return UserDefaults.primary
+            return (UserDefaults.primary, UserDefaults.primarySourceName)
         case .secondary:
-            return UserDefaults.secondary
+            return (UserDefaults.secondary, UserDefaults.secondarySourceName)
         }
-    }
-    
-    private static func sourceName(_ source: FeatureSource) -> String {
-        switch source {
-        case .primary:
-            return UserDefaults.primarySourceName
-        case .secondary:
-            return UserDefaults.secondarySourceName
-        }
+
     }
 }
