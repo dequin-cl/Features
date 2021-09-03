@@ -1,0 +1,19 @@
+import Foundation
+
+public enum FeatureSource {
+    case primary
+    case secondary
+}
+
+public enum FeatureStore {
+    
+    public static func set(_ value: Bool, for name: String, on source: FeatureSource) {
+        switch source {
+        case .primary:
+            UserDefaults.primary.setValue(value, forKey: name)
+        case .secondary:
+            UserDefaults.secondary.setValue(value, forKey: name)
+        }
+        
+    }
+}

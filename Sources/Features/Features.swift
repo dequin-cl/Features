@@ -2,22 +2,11 @@ import Foundation
 
 public protocol FeatureName: CustomStringConvertible {}
 
-fileprivate enum Configuration {
-    static let bundleIdentifier = Bundle.main.object(forInfoDictionaryKey: "CFBundleIdentifier") as! String
-    static let localSuiteName = "\(bundleIdentifier).local"
-    static let remoteSuiteName = "\(bundleIdentifier).remote"
-}
-
-private extension UserDefaults {
-    static var local: UserDefaults { UserDefaults(suiteName: Configuration.localSuiteName)! }
-    static var remote: UserDefaults { UserDefaults(suiteName: Configuration.remoteSuiteName)! }
-}
-
 public enum Features {
 
     static private let composer = FeaturesComposer(
-        primary: FeaturesValue(source: UserDefaults.remote),
-        secondary: FeaturesValue(source: UserDefaults.local)
+        primary: FeaturesValue(source: UserDefaults.primary),
+        secondary: FeaturesValue(source: UserDefaults.secondary)
     )
     
     public static func isEnabled(_ name: FeatureName, default: Bool = false) -> Bool {
@@ -33,9 +22,9 @@ public enum Features {
 
 #if DEBUG
     public extension Features {
-        struct TestHooks {
-            public static var primarySuiteName: String { Configuration.remoteSuiteName }
-            public static var secondarySuiteName: String { Configuration.localSuiteName }
+        struct TestHooksSource {
+            public static func isEnabledInPrimary(_ name: String) -> Bool? { UserDefaults.primary.value(forKey: name) as? Bool }
+            public static func isEnabledInSecondary(_ name: String) -> Bool? { UserDefaults.secondary.value(forKey: name) as? Bool }
         }
     }
 #endif
