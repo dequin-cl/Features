@@ -72,4 +72,22 @@ final class FeaturesStoreTests: XCTestCase {
             XCTAssertNil(isEnabled.isEnabled, "Expected `\(isEnabled.feature)` to not be defined on Secondary source")
         }
     }
+    
+    func test_FeatureStore_canRemoveOneValue_fromSecondary() {
+        typealias FeaturesState = (feature: String, isEnabled: Bool?)
+        let featureNames = ["featureName1", "featureName2", "featureName3"]
+        featureNames.forEach { FeatureStore.set(true, for: $0, on: .secondary) }
+        
+        FeatureStore.remove(feature: "featureName1",from: .secondary)
+
+        let expectedFeatureNames = ["featureName2", "featureName3"]
+        
+        let isEnabled = Features.TestHooksSource.isEnabledInSecondary("featureName1")
+        XCTAssertNil(isEnabled, "Expected `featureName1` to not be defined on Secondary source")
+        
+        let isEnabledInSecondary: [FeaturesState] = expectedFeatureNames.map { ($0, Features.TestHooksSource.isEnabledInSecondary($0)) }
+        isEnabledInSecondary.forEach { isEnabled in
+            XCTAssertEqual(isEnabled.isEnabled, true, "Expected `\(isEnabled.feature)` to be defined on Secondary source")
+        }
+    }
 }
