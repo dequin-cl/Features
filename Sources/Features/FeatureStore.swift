@@ -7,12 +7,20 @@ public enum FeatureSource {
 
 public enum FeatureStore {
     
+    public static func set(_ value: Bool, for name: FeatureName, on featureSource: FeatureSource) {
+        set(value, for: name.description, on: featureSource)
+    }
+    
     public static func set(_ value: Bool, for name: String, on featureSource: FeatureSource) {
         source(featureSource).object.setValue(value, forKey: name)
     }
 
     public static func removeAll(from featureSource: FeatureSource) {
         source(featureSource).object.removePersistentDomain(forName: source(featureSource).name)
+    }
+
+    public static func remove(feature name: FeatureName, from featureSource: FeatureSource) {
+        remove(feature: name.description, from: featureSource)
     }
 
     public static func remove(feature key: String, from featureSource: FeatureSource) {

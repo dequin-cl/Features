@@ -43,6 +43,24 @@ final class FeaturesStoreTests: XCTestCase {
 
     func test_FeatureStore_canRemoveOneValue_fromPrimary() {
         typealias FeaturesState = (feature: String, isEnabled: Bool?)
+        let featureNames = [Features.Tests.featureName1, Features.Tests.featureName2, Features.Tests.featureName3]
+        featureNames.forEach { FeatureStore.set(true, for: $0, on: .primary) }
+        
+        FeatureStore.remove(feature: Features.Tests.featureName1,from: .primary)
+
+        let expectedFeatureNames = [Features.Tests.featureName2, Features.Tests.featureName3]
+        
+        let isEnabled = Features.TestHooksSource.isEnabledInPrimary("featureName1")
+        XCTAssertNil(isEnabled, "Expected `featureName1` to not be defined on Primary source")
+        
+        let isEnabledInPrimary: [FeaturesState] = expectedFeatureNames.map { ($0.description, Features.TestHooksSource.isEnabledInPrimary($0.description)) }
+        isEnabledInPrimary.forEach { isEnabled in
+            XCTAssertEqual(isEnabled.isEnabled, true, "Expected `\(isEnabled.feature)` to be defined on Primary source")
+        }
+    }
+    
+    func test_FeatureStore_canRemoveOneValue_fromPrimary_UsingFeatureName() {
+        typealias FeaturesState = (feature: String, isEnabled: Bool?)
         let featureNames = ["featureName1", "featureName2", "featureName3"]
         featureNames.forEach { FeatureStore.set(true, for: $0, on: .primary) }
         
@@ -89,5 +107,15 @@ final class FeaturesStoreTests: XCTestCase {
         isEnabledInSecondary.forEach { isEnabled in
             XCTAssertEqual(isEnabled.isEnabled, true, "Expected `\(isEnabled.feature)` to be defined on Secondary source")
         }
+    }
+}
+
+private extension Features {
+    enum Tests: String, FeatureName {
+        var description: String { rawValue }
+        
+        case featureName1
+        case featureName2
+        case featureName3
     }
 }
